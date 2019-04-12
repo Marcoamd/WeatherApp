@@ -4,9 +4,9 @@ import WeatherExtraInfo from './WeatherExtraInfo';
 import './styles.css';
 import PropTypes from 'prop-types';
 
-const WeatherData = ({data:{temperature, humidity, wind}})=>{
+const WeatherData = ({data:{temperature, humidity, wind, weatherState}})=>{
     return (<div className="weatherDataCont">
-        <WeatherTemperature temperature={temperature}/>
+        <WeatherTemperature temperature={temperature} weatherState={weatherState}/>
         <WeatherExtraInfo humidity={humidity} wind={wind}/>
     </div>)
 }
