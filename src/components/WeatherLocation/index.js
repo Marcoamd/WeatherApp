@@ -42,7 +42,6 @@ class WeatherLocation extends Component {
     }
 
     transformData(json) {
-
         let weatherState = '';
         let id = json.weather[0].id;
         if(id >= 200 && id < 300)
