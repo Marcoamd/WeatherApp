@@ -1,32 +1,34 @@
 import React from 'react';
 import WeatherLocation from './index';
+import PropTypes from 'prop-types';
+
+
 
 const LocationList = (props) => {
-    //     let cities = props.cities;
-    //     console.log(cities[0]);
-    //     return (<div>
-    //         {createWeatherLocations(cities)}
-    //     </div>);
+
     let cities = props.cities;
+    let onSelectLocation = props.onSelectLocation;
+
+    //---------------------------------------------
+    
+    const generateWeatherData = (cities) => {
+        let weatherLocations = cities.map((city, i) => {
+            return <WeatherLocation city={city} key={i} onWeatherLocationClick={()=>{
+                onSelectLocation(city);
+            }} />
+        });
+        return weatherLocations;
+    }
+    //---------------------------------------------
+
     return (<div>
         {generateWeatherData(cities)}
     </div>);
 }
-const generateWeatherData = (cities) => {
-    let weatherLocations = cities.map((city, i) => {
-        return <WeatherLocation city={city} key={i} />
-    });
-    return weatherLocations;
-}
 
-const createWeatherLocations = (cities) => {
-    // let weatherLocations = [];
-    // for(let city of cities)
-    // {
-    //     weatherLocations.push(<WeatherLocation city={city}/>);
-    // }
-    // return weatherLocations;
-
+LocationList.propTypes = {
+    cities: PropTypes.array.isRequired,
+    onSelectLocation: PropTypes.func.isRequired
 }
 
 export default LocationList;

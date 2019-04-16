@@ -29,11 +29,11 @@ class WeatherLocation extends Component {
         console.log("componentDidMount");
         this.updateState();
     }
-    componentDidUpdate(){
-        console.log("componentDidUpdate");
-    }
     componentWillUpdate(){
         console.log("UNSAFE componentWillUpdate");
+    }
+    componentDidUpdate(){
+        console.log("componentDidUpdate");
     }
 
     getUrlWeatherByCity = (city) => {
@@ -91,7 +91,7 @@ class WeatherLocation extends Component {
 
     render() {
         console.log("render");
-        return (<div className="weatherLocationCont">
+        return (<div className="weatherLocationCont" onClick={this.props.onWeatherLocationClick}>
             <Location city={this.state.city} />
             {this.state.data ? <WeatherData data={this.state.data} /> : <CircularProgress/>}            
         </div>);
