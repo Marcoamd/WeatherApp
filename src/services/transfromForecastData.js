@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment/locale/es';
 
 const transformData = (id)=>{
     let weatherState = '';
@@ -35,7 +36,7 @@ export const transformForecastData = (data)=>{
     
     data.forEach((elemento)=>{
         let objForecastItem = {
-            weekDay: moment.unix(elemento.dt).utc().day(),
+            weekDay:moment.unix(elemento.dt).utc().format('dddd'),
             hour: moment.unix(elemento.dt).utc().hour(),
             data: {
                 temperature: elemento.main.temp,
@@ -47,7 +48,5 @@ export const transformForecastData = (data)=>{
         resultado.push(objForecastItem);
     });
 
-
-    console.log(resultado);
-    // return data;
+    return resultado;
 }

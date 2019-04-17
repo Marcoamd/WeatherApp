@@ -3,7 +3,6 @@ import ForecastItem from './ForecasItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { transformForecastData } from './../services/transfromForecastData';
 
-const days = ['Lunes', 'Martes', 'Miercoles', 'Jueves']
 const dataEjemplo = {
     temperature: 10,
     humidity: 10,
@@ -11,25 +10,33 @@ const dataEjemplo = {
     weatherState: 'thunderstorm'
 }
 
-class ForecastExtended extends Component{
+class ForecastExtended extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             forecastData: null
         }
-    }    
+    }
 
-    componentDidMount(){
-        let {city} =  this.props;
-        let url = this.getUrlWeatherForecastByCity(city);
-        fetch(url).then((response)=>{
-            return response.json();
-        }).then((data)=>{
-            transformForecastData(data);
+    componentWillReceiveProps(nextProps){
+        if(nextProps.city != this.props.city){
             this.setState({
-                forecastData:1
+                forecastData:null
             });
+            this.updateCity(nextProps.city);
+        }
+    }
+
+    updateCity = city =>{
+        let url = this.getUrlWeatherForecastByCity(city);
+        fetch(url).then((response) => {
+            return response.json();
+        }).then((data) => {
+            let forecastData = transformForecastData(data);
+            this.setState({
+                forecastData: forecastData
+            })
         });
     }
 
@@ -38,20 +45,28 @@ class ForecastExtended extends Component{
         return `http://api.openweathermap.org/data/2.5//forecast?q=${city}&appid=${apiKey}&units=meters`;
     }
 
-    renderForecastItemDay(){
-        let forecastItem = days.map((day, i) => { //elemento, indice, y todo el array
-            return <ForecastItem weekDay={day} hour={10} data={dataEjemplo} key={i}/>
+    componentDidMount() {
+        this.updateCity(this.props.city);
+    }
+
+    renderForecastItemDays(forecastData){
+        let ForecastItems = forecastData.map((forecastItem,i)=>{
+            return <ForecastItem weekDay={forecastItem.weekDay}
+                                 data={forecastItem.data}
+                                 hour={forecastItem.hour}
+                                 key={i}/>
         });
-        return forecastItem;
+        return ForecastItems;
     }
 
     render(){
         let {forecastData} = this.state;
+
         return (<div>
-            <h2>Pronóstico extendido de {this.props.city}</h2>
-            {forecastData ? this.renderForecastItemDay() : <CircularProgress/>}
-        </div>);
-    }    
+            <h2>Pronostico extendido de {this.props.city}</h2>
+            {forecastData ? this.renderForecastItemDays(forecastData) : <CircularProgress/>}
+        </div>)
+    }
 }
 
 export default ForecastExtended;
